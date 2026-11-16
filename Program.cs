@@ -8,14 +8,15 @@ Hero sergey = new Hero("Сергей", 110);
 
 alexander.TakeDamage(10);
 alexander.Heal(10);
-
 Guild guild = new Guild("Гильдия героев");
 guild.AddHero(yaroslav);
 guild.AddHero(anastasia);
 guild.AddHero(artem);
 guild.AddHero(alexander);
 guild.AddHero(sergey);
+
 List<Hero> members = guild.GetMembers();
+
 Console.WriteLine($">>> {guild.Name}: перекличка <<<");
 Console.WriteLine($"Участников: {guild.MemberCount}");
 
@@ -28,26 +29,43 @@ foreach (Hero hero in members) {
     Console.WriteLine(hero.GetInfo());
     Console.WriteLine();
 }
-
-int strongCount = 0;
-foreach (Hero hero in members) {
-    if (hero.Health >= 120) {
-        strongCount += 1;
-    }
-}
-Console.WriteLine($"Могут нести тяжёлые ящики (здоровье от 120): {strongCount}");
-if (members.Count > 0) {
-    Hero strongest = members[0];
-    foreach (Hero hero in members) {
-        if (hero.Health > strongest.Health) {
-            strongest = hero;
-        }
-    }
-    Console.WriteLine($"Самый здоровый: {strongest.Name} ({strongest.Health})");
-}
 Hero? found = guild.FindHeroByName(" аРтЁм ");
 if (found != null) {
     Console.WriteLine($"Найден по запросу « аРтЁм »: {found.Name}");
 } else {
     Console.WriteLine("По запросу « аРтЁм » никого нет.");
 }
+
+Console.WriteLine($"Повтор Александра принят: {guild.AddHero(alexander)}");
+Console.WriteLine($"Удалён отсутствующий: {guild.RemoveHero("Борис")}");
+Console.WriteLine($"Участников после проверок: {guild.MemberCount}");
+
+Console.WriteLine($"Могут нести тяжёлые ящики (здоровье от 120): {guild.CountHealthy(120)}");
+
+Hero? strongest = guild.FindStrongest();
+if (strongest != null) {
+    Console.WriteLine($"Самый здоровый: {strongest.Name} ({strongest.Health})");
+}
+
+Console.WriteLine();
+Console.WriteLine(">>> Мой собственный класс Product <<<");
+List<Product> products = new List<Product>();
+products.Add(new Product("Чебурек", 100));
+products.Add(new Product("Пирожок", 50));
+products.Add(new Product("Булочка", 30));
+Console.WriteLine($"Всего товаров: {products.Count}");
+Console.WriteLine($"Первый: {products[0].Name}");
+Console.WriteLine($"Последний: {products[products.Count - 1].Name}");
+foreach (Product p in products) {
+    Console.WriteLine($"{p.Name}: {p.Quantity}");
+}
+Product p4 = new Product("Ватрушка", 20);
+products.Add(p4);
+Console.WriteLine($"После добавления: {products.Count}");
+int countBig = 0;
+foreach (Product p in products) {
+    if (p.Quantity >= 50) countBig++;
+}
+Console.WriteLine($"Товаров с количеством >= 50: {countBig}");
+products[0].Restock(10);
+Console.WriteLine($"После Restock(10) через список: {products[0].Quantity}");
