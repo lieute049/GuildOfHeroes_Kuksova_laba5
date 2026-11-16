@@ -1,8 +1,36 @@
-public class Guild {
-    public string Name { get; private set; }
-    public List<Hero> Heroes { get; private set; } = new List<Hero>();
+using System;
+using System.Collections.Generic;
 
+public class Guild {
+    private List<Hero> _heroes = new List<Hero>();
+    public string Name { get; private set; }
+    public int MemberCount {
+        get { return _heroes.Count; }
+    }
     public Guild(string name) {
         Name = name;
+    }
+    public bool AddHero(Hero hero) {
+        _heroes.Add(hero);
+        return true;
+    }
+    public List<Hero> GetMembers() {
+        List<Hero> result = new List<Hero>();
+        foreach (Hero hero in _heroes) {
+            result.Add(hero);
+        }
+        return result;
+    }
+    public Hero? FindHeroByName(string name) {
+        if (string.IsNullOrWhiteSpace(name)) {
+            return null;
+        }
+        string searchName = name.Trim();
+        foreach (Hero hero in _heroes) {
+            if (string.Equals(hero.Name, searchName, StringComparison.OrdinalIgnoreCase)) {
+                return hero;
+            }
+        }
+        return null;
     }
 }
